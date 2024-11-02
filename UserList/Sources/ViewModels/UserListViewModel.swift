@@ -1,30 +1,33 @@
 import SwiftUI
 
-class UserListViewModel: ObservableObject {
+@MainActor
+final class UserListViewModel: ObservableObject {
     @Published var users: [User] = []
     @Published var isLoading = false
     @Published var isGridView = false
     
-     private let repository = UserListRepository()
-
-    func fetchUsers() {
+    private let repository: UserListRepository
+    
+    init(repository: UserListRepository = UserListRepository()) {
+        self.repository = repository
+    }
+    
+    func fetchUsers() async {
         isLoading = true
-        Task {
-            do {
-                let users = try await repository.fetchUsers(quantity: 20)
-                DispatchQueue.main.async {
-                    self.users.append(contentsOf: users)
-                    self.isLoading = false
-                }
-            } catch {
-                print("Error fetching users: \(error.localizedDescription)")
-            }
+        do {
+            let users = try await repository.fetchUsers(quantity: 20)
+            
+            self.users.append(contentsOf: users)
+            self.isLoading = false
+            
+        } catch {
+            print("Error fetching users: \(error.localizedDescription)")
         }
     }
     
-    func loadMoreDataWithFetch(currentItem user: User) {
+    func loadMoreDataWithFetch(currentItem user: User) async {
         guard shouldLoadMoreData(currentItem: user) else { return }
-        fetchUsers()
+        await fetchUsers()
     }
     
     func shouldLoadMoreData(currentItem item: User) -> Bool {
@@ -32,8 +35,8 @@ class UserListViewModel: ObservableObject {
         return !isLoading && item.id == lastItem.id
     }
     
-    func reloadUsers() {
+    func reloadUsers() async {
         users.removeAll()
-        fetchUsers()
+        await fetchUsers()
     }
 }

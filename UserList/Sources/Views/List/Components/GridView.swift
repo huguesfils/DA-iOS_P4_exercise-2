@@ -2,7 +2,7 @@ import SwiftUI
 
 struct UserListGridView: View {
     let users: [User]
-    let onAppearUser: (User) -> Void
+    let onAppearUser: (User) async -> Void
     
     var body: some View {
         ScrollView {
@@ -12,7 +12,9 @@ struct UserListGridView: View {
                         UserRowView(user: user, isGrid: true)
                     }
                     .onAppear {
-                        onAppearUser(user)
+                        Task {
+                            await onAppearUser(user)
+                        }
                     }
                 }
             }

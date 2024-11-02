@@ -2,7 +2,7 @@ import SwiftUI
 
 struct UserListListView: View {
     let users: [User]
-    let onAppearUser: (User) -> Void
+    let onAppearUser: (User) async -> Void
 
     var body: some View {
         List(users) { user in
@@ -10,7 +10,9 @@ struct UserListListView: View {
                 UserRowView(user: user, isGrid: false)
             }
             .onAppear {
-                onAppearUser(user)
+                Task {
+                    await onAppearUser(user)
+                }
             }
         }
     }

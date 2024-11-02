@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ToolbarView: View {
     @Binding var isGridView: Bool
-    let reloadAction: () -> Void
+    let reloadAction: () async -> Void
     
     var body: some View {
         HStack {
@@ -16,10 +16,12 @@ struct ToolbarView: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             
-            Button(action: reloadAction) {
-                Image(systemName: "arrow.clockwise")
-                    .imageScale(.large)
-            }
+//            Button async {
+//                await reloadAction()
+//            } label: {
+//                Image(systemName: "arrow.clockwise")
+//                    .imageScale(.large)
+//            }
         }
     }
 }

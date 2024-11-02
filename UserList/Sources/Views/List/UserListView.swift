@@ -18,7 +18,9 @@ struct UserListView: View {
             }
         }
         .onAppear {
-            self.viewModel.fetchUsers()
+            Task {
+                await viewModel.fetchUsers()
+            }
         }
     }
 }
