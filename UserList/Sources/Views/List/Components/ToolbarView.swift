@@ -16,12 +16,14 @@ struct ToolbarView: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             
-//            Button async {
-//                await reloadAction()
-//            } label: {
-//                Image(systemName: "arrow.clockwise")
-//                    .imageScale(.large)
-//            }
+            Button {
+                Task {
+                    await reloadAction()
+                }
+            } label: {
+                Image(systemName: "arrow.clockwise")
+                    .imageScale(.large)
+            }
         }
     }
 }
