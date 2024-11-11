@@ -19,7 +19,6 @@ final class UserListViewModel: ObservableObject {
             
             self.users.append(contentsOf: users)
             self.isLoading = false
-            
         } catch {
             print("Error fetching users: \(error.localizedDescription)")
         }
